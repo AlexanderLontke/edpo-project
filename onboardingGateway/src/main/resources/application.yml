@@ -1,0 +1,26 @@
+server:
+  port : 8080
+
+spring:
+  cloud:
+    function:
+      definition: producer
+    stream:
+      kafka:
+        bindings:
+          producer-out-0:
+            producer:
+              configuration:
+                value.serializer: ch.unisg.edpo.eau.onboardingGateway.application.adapter.messaging.dto.converters.MessageSerializer
+        binder:
+          brokers: localhost:29092
+
+      bindings:
+        producer-out-0:
+          destination : first-topic
+          producer:
+            useNativeEncoding: true # This enables using the custom serializer
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false

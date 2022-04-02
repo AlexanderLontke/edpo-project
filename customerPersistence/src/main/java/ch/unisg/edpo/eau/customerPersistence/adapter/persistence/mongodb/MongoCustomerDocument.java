@@ -1,18 +1,23 @@
-package ch.unisg.edpo.eau.onboardingGateway.application.domain;
+package ch.unisg.edpo.eau.customerPersistence.adapter.persistence.mongodb;
 
-public class Customer {
+import lombok.Data;
+import lombok.Value;
+
+@Data
+@Value
+public class MongoCustomerDocument {
     private final String name;
     private final String street;
     private final int houseNumber;
     private final int postalCode;
     private final boolean approved;
 
-    public Customer(String name, String street, int houseNumber, int postalCode) {
+    public MongoCustomerDocument(String name, String street, int houseNumber, int postalCode, boolean approved) {
         this.name = name;
         this.street = street;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
-        this.approved = false;
+        this.approved = approved;
     }
 
     public String getName() {

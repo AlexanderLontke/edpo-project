@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    function:
+      definition: approveCustomer
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+
+      bindings:
+        approveCustomer-in-0:
+          destination : new-customer-event
+          # producer:
+          #   useNativeEncoding: true # This enables using the custom serializer
+        approveCustomer-out-0:
+          destination: new-processed-customer
+          # producer:
+          #   useNativeEncoding: true # This enables using the custom serializer
+
+  #jackson:
+  #  serialization:
+  #    write-dates-as-timestamps: false

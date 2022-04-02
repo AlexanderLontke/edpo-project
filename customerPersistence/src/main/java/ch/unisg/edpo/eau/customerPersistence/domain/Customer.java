@@ -1,4 +1,4 @@
-package ch.unisg.edpo.eau.onboardingGateway.application.domain;
+package ch.unisg.edpo.eau.customerPersistence.domain;
 
 public class Customer {
     private final String name;
@@ -7,12 +7,12 @@ public class Customer {
     private final int postalCode;
     private final boolean approved;
 
-    public Customer(String name, String street, int houseNumber, int postalCode) {
+    public Customer(String name, String street, int houseNumber, int postalCode, boolean approved) {
         this.name = name;
         this.street = street;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
-        this.approved = false;
+        this.approved = approved;
     }
 
     public String getName() {

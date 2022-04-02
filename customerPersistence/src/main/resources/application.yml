@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:8nP7s0a@localhost:27017/
+      database: edpo

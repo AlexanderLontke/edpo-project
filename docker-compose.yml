@@ -2,9 +2,19 @@ version: "3"
 
 # Kafka like https://docs.confluent.io/current/installation/docker/docs/installation/single-node-client.html
 services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 8nP7s0a
+    volumes:
+      - database:/data/db
+
   zookeeper:
+    container_name: zookeeper
     image: "bitnami/zookeeper:latest"
-    hostname: zookeeper
     networks:
       - energyandutilities
     ports:
@@ -14,8 +24,8 @@ services:
       ALLOW_ANONYMOUS_LOGIN: "yes"
 
   kafka:
+    container_name: kafka
     image: "bitnami/kafka:latest"
-    hostname: kafka
     networks:
       - energyandutilities
     ports:
@@ -33,17 +43,37 @@ services:
     depends_on:
       - zookeeper
 
-  app:
-    image: python
+  onboardingGateway:
+    container_name: onboarding-gateway
+    image: onboarding-gateway
+    build:
+      context: ./onboardingGateway
+      dockerfile: Dockerfile
     networks:
       - energyandutilities
     ports:
-      - "8091:8091"
+      - "8080:8080"
     depends_on:
       - kafka
     environment:
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES=kafka:2181
+
+#  costomerApproval:
+#    container_name: customer-approval
+#    image: customer-approval
+#    build:
+#      context: ./customerApproval
+#      dockerfile: Dockerfile
+#    networks:
+#      - energyandutilities
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - kafka
+#    environment:
+#      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+#      - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES=kafka:2181
 
 networks:
   energyandutilities:

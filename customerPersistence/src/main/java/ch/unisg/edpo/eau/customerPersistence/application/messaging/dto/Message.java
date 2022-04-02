@@ -1,12 +1,8 @@
-package ch.unisg.edpo.eau.onboardingGateway.application.adapter.messaging.dto;
+package ch.unisg.edpo.eau.customerPersistence.application.messaging.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.time.Instant;
 import java.util.UUID;
 
 public class Message<T> {
-
 
     // Cloud Events attributes (https://github.com/cloudevents/spec/blob/v1.0/spec.md)
     private String type;
@@ -26,7 +22,7 @@ public class Message<T> {
 
     @Override
     public String toString() {
-        return "Message [type=" + type + ", id=" + id + ", " +
+        return "Message [type=" + type + ", id=" + id + "," +
                 "data=" + data + "]";
     }
 
@@ -65,8 +61,6 @@ public class Message<T> {
     public String getSpecversion() {
         return specversion;
     }
-
-
 }
 
 

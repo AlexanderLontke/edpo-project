@@ -1,6 +1,6 @@
-package ch.unisg.edpo.eau.onboardingGateway.application.adapter.messaging.dto.converters;
+package ch.unisg.edpo.eau.customerApproval.application.adapter.messaging.dto.converters;
 
-import ch.unisg.edpo.eau.onboardingGateway.application.adapter.messaging.dto.Message;
+import ch.unisg.edpo.eau.customerApproval.application.adapter.messaging.dto.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;

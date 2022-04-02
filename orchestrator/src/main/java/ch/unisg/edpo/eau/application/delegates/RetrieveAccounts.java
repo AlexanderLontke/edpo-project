@@ -15,12 +15,12 @@ public class RetrieveAccounts implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        String listString = queryAccruedAccountsPort.retrieveAccountsDueToday();
+        Optional<String> listStringOptional = queryAccruedAccountsPort.retrieveAccountsDueToday();
 
-        if (Objects.equals(listString, "")) return;
+        if (listStringOptional.isEmpty()) return;
 
         //TODO handling of response should be improved
-        listString = listString.replaceAll("\\s+","");
+        String listString = listStringOptional.get().replaceAll("\\s+","");
         String[] accountNumbers = listString.substring(1, listString.length() - 1).split(",");
         delegateExecution.setVariable("accountNumberList", Arrays.asList(accountNumbers));
     }

@@ -1,5 +1,7 @@
 package ch.unisg.edpo.eau.application.port.out;
 
+import java.util.Optional;
+
 public interface QueryAccountInformationPort {
-    String retrieveAccountInformation(String accountId);
+    Optional<String> retrieveAccountInformation(String accountId);
 }

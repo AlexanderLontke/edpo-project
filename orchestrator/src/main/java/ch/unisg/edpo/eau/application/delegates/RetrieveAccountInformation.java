@@ -9,6 +9,7 @@ import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Named
 public class RetrieveAccountInformation implements JavaDelegate {
@@ -21,8 +22,8 @@ public class RetrieveAccountInformation implements JavaDelegate {
         List<String> serializedAccounts = new ArrayList<>();
 
         for (String accountNumber : accountNumbers) {
-            String serializedAccount = queryAccountInformationPort.retrieveAccountInformation(accountNumber);
-            if (!Objects.equals(serializedAccount, "")) serializedAccounts.add(serializedAccount);
+            Optional<String> serializedAccountOptional = queryAccountInformationPort.retrieveAccountInformation(accountNumber);
+            serializedAccountOptional.ifPresent(serializedAccounts::add);
         }
 
         delegateExecution.setVariable("accountList", serializedAccounts);

@@ -1,20 +1,21 @@
-package ch.unisg.edpo.eau;
+package ch.unisg.edpo.eau.adapter.out.web;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import javax.inject.Named;
+import ch.unisg.edpo.eau.application.port.out.QueryAccruedAccountsPort;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.*;
 
-@Named
-public class RetrieveAccounts implements JavaDelegate {
-
+@Component
+@Primary
+public class QueryAccruedAccountsWebAdapter implements QueryAccruedAccountsPort {
+    //TODO return Optional instead of empty string
     @Override
-    public void execute(DelegateExecution delegateExecution) throws Exception {
+    public String retrieveAccountsDueToday() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8084/Accounts/today"))
@@ -23,13 +24,12 @@ public class RetrieveAccounts implements JavaDelegate {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                //TODO handling of response should be improved
-                String body = response.body().replaceAll("\\s+","");
-                String[] accountNumbers = body.substring(1, body.length() - 1).split(",");
-                delegateExecution.setVariable("accountNumberList", Arrays.asList(accountNumbers));
+                return response.body();
             }
+            return "";
         } catch (IOException | InterruptedException e) {
             System.out.println("Exception: " + e.getMessage());
+            return "";
         }
     }
 }

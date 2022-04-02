@@ -9,23 +9,38 @@ import lombok.Setter;
 
 public class BookingTransaction {
     public static final String MEDIA_TYPE = "application/json";
+    public enum TransactionStatusValues {
+        OPEN, PROCESSED, FAILED
+    }
 
     @Getter
     @Setter
     private String accountId;
 
+    @Getter
+    @Setter
+    private String iban;
+
     @Getter @Setter
     private Double amount;
 
     @Getter @Setter
-    private String Status;
+    private TransactionStatusValues Status;
 
     public BookingTransaction() {  }
 
-    public BookingTransaction(String accountNumber, Double amount, String status) {
+    public BookingTransaction(String accountNumber, String iban, Double amount, TransactionStatusValues status) {
         this.accountId = accountNumber;
+        this.iban = iban;
         this.amount = amount;
         this.Status = status;
+    }
+
+    public BookingTransaction(String accountNumber, String iban, Double amount) {
+        this.accountId = accountNumber;
+        this.iban = iban;
+        this.amount = amount;
+        this.Status = TransactionStatusValues.OPEN;
     }
 
     public static String serialize(BookingTransaction bookingTransaction) throws JsonProcessingException {
@@ -40,7 +55,8 @@ public class BookingTransaction {
 
         return new BookingTransaction(
                 accountData.get("accountId").textValue(),
+                accountData.get("iban").textValue(),
                 accountData.get("amount").doubleValue(),
-                accountData.get("status").textValue());
+                TransactionStatusValues.valueOf(accountData.get("status").textValue()));
     }
 }

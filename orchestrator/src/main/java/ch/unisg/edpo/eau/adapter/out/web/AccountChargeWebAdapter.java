@@ -1,32 +1,30 @@
-package ch.unisg.edpo.eau;
+package ch.unisg.edpo.eau.adapter.out.web;
 
-import ch.unisg.edpo.eau.domain.Account;
+import ch.unisg.edpo.eau.application.port.out.AccountChargePort;
+import ch.unisg.edpo.eau.domain.BookingTransaction;
 import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import javax.inject.Named;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
 import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Random;
 
-@Named
-public class ChargeAccount implements JavaDelegate {
-
+@Component
+@Primary
+public class AccountChargeWebAdapter implements AccountChargePort {
     @Override
-    public void execute(DelegateExecution delegateExecution) throws Exception {
-        String accountString = (String) delegateExecution.getVariable("account");
-
+    public void processTransaction(BookingTransaction bookingTransaction) {
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8083/paymentTransaction/"))
-                .POST(HttpRequest.BodyPublishers.ofString(accountString))
-                .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                .build();
         try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8083/paymentTransaction/"))
+                    .POST(HttpRequest.BodyPublishers.ofString(BookingTransaction.serialize(bookingTransaction)))
+                    .header(HttpHeaders.CONTENT_TYPE, BookingTransaction.MEDIA_TYPE)
+                    .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 201) {
                 System.out.println(response.body());

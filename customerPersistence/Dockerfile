@@ -8,6 +8,6 @@ RUN mvn -f app/pom.xml --batch-mode --update-snapshots -Dmaven.test.skip package
 
 FROM openjdk
 
-COPY --from=build /app/target/email-service-0.0.1-SNAPSHOT.jar ./email-service-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/target/customerPersistence-0.0.1-SNAPSHOT.jar ./customerPersistence-0.0.1-SNAPSHOT.jar
 
-CMD java -jar email-service-0.0.1-SNAPSHOT.jar
+CMD java -jar customerPersistence-0.0.1-SNAPSHOT.jar

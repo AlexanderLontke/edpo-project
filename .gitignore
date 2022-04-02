@@ -27,3 +27,5 @@ hs_err_pid*
 
 #camunda databases
 camunda-h2-database.*
+
+.DS_Store

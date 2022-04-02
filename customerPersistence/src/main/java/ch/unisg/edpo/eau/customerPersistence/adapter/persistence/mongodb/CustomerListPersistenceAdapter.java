@@ -21,7 +21,17 @@ public class CustomerListPersistenceAdapter implements SaveCustomerListPort, Loa
 
     @Override
     public CustomerList loadCustomerListById(String id) {
-        MongoCustomerListDocument mongoCustomerListDocument = customerListRepository.findByCustomerListId(id);
+        MongoCustomerListDocument mongoCustomerListDocument;
+        if (id.equals("")){
+            List<MongoCustomerListDocument> allLists = customerListRepository.findAll();
+            if (allLists.size() > 0) {
+                mongoCustomerListDocument = allLists.get(0);
+            } else {
+                mongoCustomerListDocument = null;
+            }
+        }else{
+            mongoCustomerListDocument = customerListRepository.findByCustomerListID(id);
+        }
         if (mongoCustomerListDocument == null) {
             return new CustomerList(
                     UUID.randomUUID().toString(), new ArrayList<>()

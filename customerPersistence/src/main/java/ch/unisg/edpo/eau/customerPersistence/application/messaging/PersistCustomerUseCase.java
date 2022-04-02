@@ -30,7 +30,7 @@ public class PersistCustomerUseCase {
         return customerDTOMessage -> {
             CustomerDTO customerDTO = customerDTOMessage.getData();
             Customer customer = customerDTO.toEntity();
-            CustomerList customerList = loadCustomerListPort.loadCustomerList();
+            CustomerList customerList = loadCustomerListPort.loadCustomerListById("");
             customerList.getCustomerList().add(customer);
             saveCustomerListPort.saveCustomerList(customerList);
             sendEmailPort.sendEmail(customer);

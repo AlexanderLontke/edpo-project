@@ -1,8 +1,8 @@
-package ch.unisg.edpo.eau.onboardingGateway.application.adapter.http.in;
+package ch.unisg.edpo.eau.onboardingGateway.adapter.http.in;
 
-import ch.unisg.edpo.eau.onboardingGateway.application.adapter.http.dto.CustomerDTO;
-import ch.unisg.edpo.eau.onboardingGateway.application.adapter.messaging.MessageSender;
-import ch.unisg.edpo.eau.onboardingGateway.application.adapter.messaging.dto.Message;
+import ch.unisg.edpo.eau.onboardingGateway.adapter.http.dto.CustomerDTO;
+import ch.unisg.edpo.eau.onboardingGateway.adapter.messaging.MessageSender;
+import ch.unisg.edpo.eau.onboardingGateway.adapter.messaging.dto.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

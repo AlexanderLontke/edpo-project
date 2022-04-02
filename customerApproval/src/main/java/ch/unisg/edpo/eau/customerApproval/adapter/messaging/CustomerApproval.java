@@ -1,7 +1,7 @@
-package ch.unisg.edpo.eau.customerApproval.application.adapter.messaging;
+package ch.unisg.edpo.eau.customerApproval.adapter.messaging;
 
-import ch.unisg.edpo.eau.customerApproval.application.adapter.messaging.dto.CustomerDTO;
-import ch.unisg.edpo.eau.customerApproval.application.adapter.messaging.dto.Message;
+import ch.unisg.edpo.eau.customerApproval.adapter.messaging.dto.CustomerDTO;
+import ch.unisg.edpo.eau.customerApproval.adapter.messaging.dto.Message;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 

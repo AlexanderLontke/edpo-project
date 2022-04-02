@@ -1,6 +1,6 @@
-package ch.unisg.edpo.eau.onboardingGateway.application.adapter.messaging;
+package ch.unisg.edpo.eau.onboardingGateway.adapter.messaging;
 
-import ch.unisg.edpo.eau.onboardingGateway.application.adapter.messaging.dto.Message;
+import ch.unisg.edpo.eau.onboardingGateway.adapter.messaging.dto.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;

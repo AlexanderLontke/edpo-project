@@ -1,6 +1,6 @@
-package ch.unisg.edpo.eau.onboardingGateway.application.adapter.http.dto;
+package ch.unisg.edpo.eau.onboardingGateway.adapter.http.dto;
 
-import ch.unisg.edpo.eau.onboardingGateway.application.domain.Customer;
+import ch.unisg.edpo.eau.onboardingGateway.domain.Customer;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

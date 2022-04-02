@@ -1,4 +1,4 @@
-package ch.unisg.edpo.eau.customerApproval.application.adapter.messaging.dto;
+package ch.unisg.edpo.eau.customerApproval.adapter.messaging.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Value
-@Document(collation = "customer_lists")
+@Document(collection = "customer_lists")
 public class MongoCustomerListDocument {
     @Id
     String customerListID;

@@ -94,6 +94,8 @@ services:
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES=kafka:2181
       - SPRING_DATA_MONGODB_URI=mongodb://root:8nP7s0a@mongodb:27017/
       - SPRING_DATA_MONGODB_DATABASE=edpo
+      - SERVICES_EMAIL_URI=http://email:8085
+
 
   email:
     container_name: email

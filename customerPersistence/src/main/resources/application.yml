@@ -18,4 +18,4 @@ spring:
       database: edpo
 services:
   email:
-    uri: email:8085
+    uri: http://localhost:8085

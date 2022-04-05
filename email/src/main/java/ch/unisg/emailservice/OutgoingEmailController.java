@@ -12,6 +12,7 @@ import java.util.Random;
 public class OutgoingEmailController {
     @PostMapping(path = "/email", consumes = {Email.MEDIA_TYPE})
     public ResponseEntity<String> addNewTaskTaskToTaskList(@RequestBody Email email) {
+        System.out.println("Successfully send email \"" + email.getTitle() + "\" to " + email.getRecipient());
         return new ResponseEntity<>("Successfully send email \"" + email.getTitle() + "\" to " + email.getRecipient(), new HttpHeaders(), HttpStatus.CREATED);
     }
 }

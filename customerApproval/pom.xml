@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ch.unisg.edpo.eau</groupId>
-	<artifactId>onboardingGateway</artifactId>
+	<artifactId>customerApproval</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>onboardingGateway</name>
-	<description>Entrypoint for new customers</description>
+	<name>customerApproval</name>
+	<description>Customer approval service</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2021.0.1</spring-cloud.version>
@@ -22,18 +22,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-stream</artifactId>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>5.3.18</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

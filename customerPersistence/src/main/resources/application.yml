@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    function:
+      definition: persistCustomer
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+
+      bindings:
+        persistCustomer-in-0:
+          destination: new-processed-customer
+        persistCustomer-out-0:
+          destination: finished-processing-customer
+  data:
+    mongodb:
+      uri: mongodb://root:8nP7s0a@localhost:27017/
+      database: edpo
+services:
+  email:
+    uri: http://localhost:8085

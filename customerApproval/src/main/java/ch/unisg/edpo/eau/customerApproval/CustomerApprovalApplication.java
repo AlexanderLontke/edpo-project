@@ -1,14 +1,13 @@
-package ch.unisg.edpo.eau.onboardingGateway;
+package ch.unisg.edpo.eau.customerApproval;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class OnboardingGatewayApplication {
+public class CustomerApprovalApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OnboardingGatewayApplication.class, args);
+		SpringApplication.run(CustomerApprovalApplication.class, args);
 	}
 
 }

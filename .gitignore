@@ -24,3 +24,8 @@ hs_err_pid*
 
 # IntelliJ
 .idea
+
+#camunda databases
+camunda-h2-database.*
+
+.DS_Store

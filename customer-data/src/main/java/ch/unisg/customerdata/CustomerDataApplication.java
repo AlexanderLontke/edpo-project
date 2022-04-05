@@ -1,14 +1,14 @@
-package ch.unisg.edpo.eau.onboardingGateway;
+package ch.unisg.customerdata;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class OnboardingGatewayApplication {
+public class CustomerDataApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OnboardingGatewayApplication.class, args);
+		SpringApplication customerData = new SpringApplication(CustomerDataApplication.class);
+		customerData.run(args);
 	}
 
 }

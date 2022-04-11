@@ -55,8 +55,8 @@ public class Account {
         JsonNode accountData = new ObjectMapper().readTree(accountString);
 
         return new Account(
-                accountData.get("accountId").textValue(),
-                accountData.get("amount").doubleValue(),
+                accountData.get("customerID").textValue(),
+                accountData.get("outstandingAmount").doubleValue(),
                 accountData.get("iban").textValue(),
                 accountData.get("billingCycle").textValue());
     }

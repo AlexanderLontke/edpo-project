@@ -89,6 +89,8 @@ services:
       - energyandutilities
     depends_on:
       - kafka
+    ports:
+      - "9000:8080"
     environment:
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES=kafka:2181
@@ -107,6 +109,32 @@ services:
       - "8085:8085"
     networks:
       - energyandutilities
+
+  payment-gateway:
+    container_name: payment-gateway
+    image: payment-gateway
+    build:
+      context: ./payment-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - energyandutilities
+
+
+  orchestrator:
+    container_name: orchestrator
+    image: orchestrator
+    build:
+      context: ./orchestrator
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    networks:
+      - energyandutilities
+    environment:
+      - CAMUNDA_BPM_ADMIN-USER_ID=demo
+      - CAMUNDA_BPM_ADMIN-USER_PASSWORD=demo
 
 volumes:
   database:

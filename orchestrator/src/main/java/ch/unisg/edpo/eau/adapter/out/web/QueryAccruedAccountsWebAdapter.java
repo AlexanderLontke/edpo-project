@@ -1,6 +1,8 @@
 package ch.unisg.edpo.eau.adapter.out.web;
 
 import ch.unisg.edpo.eau.application.port.out.QueryAccruedAccountsPort;
+import ch.unisg.edpo.eau.common.ConfigProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +16,14 @@ import java.util.Optional;
 @Component
 @Primary
 public class QueryAccruedAccountsWebAdapter implements QueryAccruedAccountsPort {
+    @Autowired
+    ConfigProperties configProperties;
+
     @Override
     public Optional<String> retrieveAccountsDueToday() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8084/Accounts/today"))
+                .uri(URI.create(configProperties.getCustomerPersistenceURL() + "/Accounts/today"))
                 .headers("Content-Type", "application/json")
                 .GET().build();
         try {

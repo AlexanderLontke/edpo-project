@@ -1,7 +1,9 @@
 package ch.unisg.edpo.eau.adapter.out.web;
 
 import ch.unisg.edpo.eau.application.port.out.SendEmailPort;
+import ch.unisg.edpo.eau.common.ConfigProperties;
 import ch.unisg.edpo.eau.domain.Email;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +17,16 @@ import java.net.http.HttpResponse;
 @Component
 @Primary
 public class SendEmailWebAdapter implements SendEmailPort {
+    @Autowired
+    ConfigProperties configProperties;
+
     @Override
     public void sendEmail(Email email) {
         HttpClient client = HttpClient.newHttpClient();
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8085/email"))
+                    .uri(URI.create(configProperties.getEmailServiceURL() + "/email"))
                     .POST(HttpRequest.BodyPublishers.ofString(Email.serialize(email)))
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
                     .build();

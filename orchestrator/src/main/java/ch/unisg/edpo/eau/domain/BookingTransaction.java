@@ -54,9 +54,9 @@ public class BookingTransaction {
         JsonNode accountData = new ObjectMapper().readTree(transactionString);
 
         return new BookingTransaction(
-                accountData.get("accountId").textValue(),
+                accountData.get("customerID").textValue(),
                 accountData.get("iban").textValue(),
-                accountData.get("amount").doubleValue(),
+                accountData.get("outstandingAmount").doubleValue(),
                 TransactionStatusValues.valueOf(accountData.get("status").textValue()));
     }
 }

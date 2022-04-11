@@ -8,6 +8,6 @@ RUN mvn -f app/pom.xml --batch-mode --update-snapshots -Dmaven.test.skip package
 
 FROM openjdk
 
-COPY --from=build /app/target/tapas-robot-executor-0.0.1-SNAPSHOT.jar ./tapas-robot-executor-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/target/orchestrator-0.0.1-SNAPSHOT.jar ./orchestrator-0.0.1-SNAPSHOT.jar
 
-CMD java -jar tapas-robot-executor-0.0.1-SNAPSHOT.jar
+CMD java -jar orchestrator-0.0.1-SNAPSHOT.jar

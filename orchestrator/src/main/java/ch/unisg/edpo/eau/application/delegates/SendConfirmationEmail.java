@@ -19,7 +19,7 @@ public class SendConfirmationEmail implements JavaDelegate {
         String accountString = (String) delegateExecution.getVariable("account");
         Account account = Account.deserialize(accountString);
 
-        //TODO should be email not accountId
+        //TODO should be email not customerID
         Email email = new Email(account.getAccountId(), "Your Bill was cleared", "We were successful in booking your last invoice of " + account.getAmount() + " off the bank on file for your Account.");
 
         sendEmailPort.sendEmail(email);

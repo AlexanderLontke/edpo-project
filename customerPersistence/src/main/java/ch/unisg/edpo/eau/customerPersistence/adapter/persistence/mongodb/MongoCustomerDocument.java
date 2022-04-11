@@ -6,18 +6,29 @@ import lombok.Value;
 @Data
 @Value
 public class MongoCustomerDocument {
-    private final String name;
-    private final String street;
-    private final int houseNumber;
-    private final int postalCode;
-    private final boolean approved;
+    String name;
+    String street;
+    int houseNumber;
+    int postalCode;
+    boolean approved;
 
-    public MongoCustomerDocument(String name, String street, int houseNumber, int postalCode, boolean approved) {
+    String customerID;
+    String IBAN;
+    String billingCycle;
+    Double outstandingAmount;
+    String email;
+
+    public MongoCustomerDocument(String name, String street, int houseNumber, int postalCode, boolean approved, String customerID, String IBAN, String billingCycle, Double outstandingAmount, String email) {
         this.name = name;
         this.street = street;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
         this.approved = approved;
+        this.customerID = customerID;
+        this.IBAN = IBAN;
+        this.billingCycle = billingCycle;
+        this.outstandingAmount = outstandingAmount;
+        this.email = email;
     }
 
     public String getName() {

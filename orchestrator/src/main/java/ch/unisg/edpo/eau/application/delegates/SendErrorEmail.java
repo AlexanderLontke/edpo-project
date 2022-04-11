@@ -19,7 +19,7 @@ public class SendErrorEmail implements JavaDelegate {
         String accountString = (String) delegateExecution.getVariable("account");
         Account account = Account.deserialize(accountString);
 
-        //TODO should be email not accountId
+        //TODO should be email not customerID
         Email email = new Email(account.getAccountId(), "There was an issue with your invoice", "Unfortunately we were not successful in booking your last invoice of " + account.getAmount() + " off the bank on file for your Account. A support agent will have a look at it and might get back to you with further requests.");
 
         sendEmailPort.sendEmail(email);

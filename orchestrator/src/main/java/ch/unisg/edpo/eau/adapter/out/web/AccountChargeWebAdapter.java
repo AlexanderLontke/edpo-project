@@ -1,8 +1,10 @@
 package ch.unisg.edpo.eau.adapter.out.web;
 
 import ch.unisg.edpo.eau.application.port.out.AccountChargePort;
+import ch.unisg.edpo.eau.common.ConfigProperties;
 import ch.unisg.edpo.eau.domain.BookingTransaction;
 import org.camunda.bpm.engine.delegate.BpmnError;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +18,15 @@ import java.net.http.HttpResponse;
 @Component
 @Primary
 public class AccountChargeWebAdapter implements AccountChargePort {
+    @Autowired
+    ConfigProperties configProperties;
+
     @Override
     public void processTransaction(BookingTransaction bookingTransaction) {
         HttpClient client = HttpClient.newHttpClient();
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8083/paymentTransaction/"))
+                    .uri(URI.create(configProperties.getPaymentGatewayURL() + "/paymentTransaction/"))
                     .POST(HttpRequest.BodyPublishers.ofString(BookingTransaction.serialize(bookingTransaction)))
                     .header(HttpHeaders.CONTENT_TYPE, BookingTransaction.MEDIA_TYPE)
                     .build();

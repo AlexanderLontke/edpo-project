@@ -17,7 +17,7 @@ import java.util.Arrays;
 public class BillsDueController {
     @Autowired
     LoadCustomerListPort loadCustomerListPort;
-    @GetMapping(path = "/Accounts/today")
+    @GetMapping(path = "/Customers/today")
     public ResponseEntity<String> addNumbers() {
         Object[] accountNumbers = loadCustomerListPort.
                 loadCustomerListById("").
@@ -25,7 +25,7 @@ public class BillsDueController {
                 stream().
                 filter(Customer::isApproved).
                 map(Customer::getCustomerID).toArray();
-
+        System.out.println(Arrays.toString(accountNumbers));
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add(HttpHeaders.CONTENT_TYPE, CustomerHTTPDTO.MEDIA_TYPE);
 

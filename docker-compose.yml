@@ -90,7 +90,7 @@ services:
     depends_on:
       - kafka
     ports:
-      - "9000:8080"
+      - "9000:9000"
     environment:
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES=kafka:2181

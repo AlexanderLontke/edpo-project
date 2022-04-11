@@ -23,7 +23,7 @@ public class QueryAccruedAccountsWebAdapter implements QueryAccruedAccountsPort 
     public Optional<String> retrieveAccountsDueToday() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(configProperties.getCustomerPersistenceURL() + "/Accounts/today"))
+                .uri(URI.create(configProperties.getCustomerPersistenceURL() + "/Customers/today"))
                 .headers("Content-Type", "application/json")
                 .GET().build();
         try {

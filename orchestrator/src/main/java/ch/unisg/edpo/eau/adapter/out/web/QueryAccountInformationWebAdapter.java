@@ -23,7 +23,7 @@ public class QueryAccountInformationWebAdapter implements QueryAccountInformatio
     public Optional<String> retrieveAccountInformation(String accountId) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(configProperties.getCustomerPersistenceURL() + "Account/" + accountId))
+                .uri(URI.create(configProperties.getCustomerPersistenceURL() + "/Customer/" + accountId))
                 .headers("Content-Type", "application/json")
                 .GET().build();
         try {

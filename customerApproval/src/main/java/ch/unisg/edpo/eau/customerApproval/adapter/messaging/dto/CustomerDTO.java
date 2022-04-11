@@ -24,7 +24,7 @@ public class CustomerDTO {
             @JsonProperty("postalCode") int postalCode,
             @JsonProperty("approved") boolean approved,
             @JsonProperty("customerID") String customerID,
-            @JsonProperty("IBAN") String IBAN,
+            @JsonProperty("iban") String IBAN,
             @JsonProperty("billingCycle") String billingCycle,
             @JsonProperty("outstandingAmount") Double outstandingAmount,
             @JsonProperty("email") String email
@@ -82,5 +82,7 @@ public class CustomerDTO {
         this.approved = approved;
     }
 
-
+    public String getEmail() {
+        return email;
+    }
 }

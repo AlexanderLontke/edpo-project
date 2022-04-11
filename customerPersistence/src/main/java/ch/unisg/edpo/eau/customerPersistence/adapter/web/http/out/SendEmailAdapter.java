@@ -30,7 +30,7 @@ public class SendEmailAdapter implements SendEmailPort {
         content += "approved.";
 
         EmailDTO emailDTO = new EmailDTO(
-                customer.getName(),
+                customer.getEmail(),
                 "Registration Email",
                 content
         );

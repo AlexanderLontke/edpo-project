@@ -52,6 +52,7 @@ public class Account {
     }
 
     public static Account deserialize(String accountString) throws JsonProcessingException {
+        System.out.println(accountString);
         JsonNode accountData = new ObjectMapper().readTree(accountString);
 
         return new Account(

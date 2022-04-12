@@ -1,7 +1,9 @@
 package ch.unisg.edpo.eau.customerPersistence.domain;
 
-import java.util.UUID;
+import lombok.EqualsAndHashCode;
 
+
+@EqualsAndHashCode
 public class Customer {
     private final String customerID;
     private final String IBAN;

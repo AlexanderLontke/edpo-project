@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 @Component
-public class CustomerApproval {
+public class NewCustomerEvent {
     @Bean
     public Function<Message<CustomerDTO>, Message<CustomerDTO>> approveCustomer(){
         return (message) -> {

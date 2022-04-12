@@ -28,20 +28,4 @@ public class Email {
         this.title = title;
         this.content = content;
     }
-
-    public static String serialize(Email email) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
-        return mapper.writeValueAsString(email);
-    }
-
-    public static Email deserialize(String emailString) throws JsonProcessingException {
-        JsonNode emailData = new ObjectMapper().readTree(emailString);
-
-        return new Email(
-                emailData.get("recipient").textValue(),
-                emailData.get("title").textValue(),
-                emailData.get("content").textValue());
-    }
 }

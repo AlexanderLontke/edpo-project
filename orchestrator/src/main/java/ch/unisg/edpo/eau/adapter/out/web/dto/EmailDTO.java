@@ -1,4 +1,4 @@
-package ch.unisg.edpo.eau.domain;
+package ch.unisg.edpo.eau.adapter.out.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Email {
+public class EmailDTO {
     public static final String MEDIA_TYPE = "application/json";
 
     @Getter
@@ -21,27 +21,18 @@ public class Email {
     private String content;
 
 
-    public Email() {  }
+    public EmailDTO() {}
 
-    public Email(String recipient, String title, String content) {
+    public EmailDTO(String recipient, String title, String content) {
         this.recipient = recipient;
         this.title = title;
         this.content = content;
     }
 
-    public static String serialize(Email email) throws JsonProcessingException {
+    public static String serialize(EmailDTO EmailDTO) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        return mapper.writeValueAsString(email);
-    }
-
-    public static Email deserialize(String emailString) throws JsonProcessingException {
-        JsonNode emailData = new ObjectMapper().readTree(emailString);
-
-        return new Email(
-                emailData.get("recipient").textValue(),
-                emailData.get("title").textValue(),
-                emailData.get("content").textValue());
+        return mapper.writeValueAsString(EmailDTO);
     }
 }

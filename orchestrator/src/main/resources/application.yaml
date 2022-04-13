@@ -8,7 +8,7 @@ camunda.bpm.admin-user:
   password: demo
 
 services:
-  paymantGateway:
+  paymentGateway:
     uri: http://payment-gateway:8083
   customerPersistence:
     uri: http://customer-persistence:9000

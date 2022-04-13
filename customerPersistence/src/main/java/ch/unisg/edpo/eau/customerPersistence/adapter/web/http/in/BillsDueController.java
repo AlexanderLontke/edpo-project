@@ -25,7 +25,7 @@ public class BillsDueController {
                 stream().
                 filter(Customer::isApproved).
                 map(Customer::getCustomerID).toArray();
-        System.out.println(Arrays.toString(accountNumbers));
+        //System.out.println(Arrays.toString(accountNumbers));
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add(HttpHeaders.CONTENT_TYPE, CustomerHTTPDTO.MEDIA_TYPE);
 

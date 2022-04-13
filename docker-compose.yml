@@ -135,6 +135,7 @@ services:
     environment:
       - CAMUNDA_BPM_ADMIN-USER_ID=demo
       - CAMUNDA_BPM_ADMIN-USER_PASSWORD=demo
+      - SERVICES_PAYMENTGATEWAY_URI=http://payment-gateway:8083
 
 volumes:
   database:

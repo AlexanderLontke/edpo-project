@@ -31,9 +31,6 @@ public class SendEmailWebAdapter implements SendEmailPort {
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 201) {
-                System.out.println(response.body());
-            }
         } catch (IOException | InterruptedException e) {
             System.out.println("Exception: " + e.getMessage());
         }

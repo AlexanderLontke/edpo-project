@@ -1,4 +1,4 @@
-package ch.unisg.edpo.eau.adapter.out.web.dto;
+package ch.unisg.edpo.eau.paymentgateway;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;

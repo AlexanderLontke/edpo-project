@@ -1,4 +1,4 @@
-package ch.unisg.emailservice;
+package ch.unisg.edpo.eau.emailservice;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;

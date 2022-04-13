@@ -32,7 +32,8 @@ public class AccountChargeWebAdapter implements AccountChargePort {
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 201) {
-                System.out.println(response.body());
+                BookingTransactionDTO bookingTransactionDTO = BookingTransactionDTO.deserialize(response.body());
+                System.out.println("The booking status is: " + bookingTransactionDTO.getStatus());
             } else if (response.statusCode() == 400) {
                 throw new BpmnError("TransactionError", "The Transaction could not be processed.");
             } else {

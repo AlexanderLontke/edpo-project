@@ -12,7 +12,6 @@
 	<artifactId>email-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>email-service</name>
-	<description>Simple executor to add two numbers</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

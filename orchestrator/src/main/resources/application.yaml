@@ -9,8 +9,8 @@ camunda.bpm.admin-user:
 
 services:
   paymentGateway:
-    uri: http://payment-gateway:8083
+    uri: http://localhost:8085
   customerPersistence:
-    uri: http://customer-persistence:9000
+    uri: http://localhost:8082
   email:
-    uri: http://email:8085
+    uri: http://localhost:8085

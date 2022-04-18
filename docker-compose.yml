@@ -127,9 +127,9 @@ services:
       - SERVER_PORT=8084
       - CAMUNDA_BPM_ADMIN-USER_ID=demo
       - CAMUNDA_BPM_ADMIN-USER_PASSWORD=demo
-      - SERVICES_CUSTOMERPERSISTENCE_URI=http://customer-persistence:8083
+      - SERVICES_CUSTOMERPERSISTENCE_URI=http://customer-persistence:8082
       - SERVICES_EMAIL_URI=http://email:8083
-      - SERVICES_PAYMENTGATEWAY_URI=http://payment-gateway:8083
+      - SERVICES_PAYMENTGATEWAY_URI=http://payment-gateway:8085
 
   payment-gateway:
     container_name: payment-gateway

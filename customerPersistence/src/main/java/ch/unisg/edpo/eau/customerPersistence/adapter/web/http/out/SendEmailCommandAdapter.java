@@ -24,14 +24,17 @@ public class SendEmailCommandAdapter implements SendEmailCommandPort {
     @Override
     public void sendEmail(Customer customer) {
         String content = "Customer" + customer.getName() + "is ";
+        String title = "Registration";
         if (!customer.isApproved()) {
             content += "not ";
+            title += " rejected ";
         }
         content += "approved.";
+        title += "E-mail";
 
         EmailDTO emailDTO = new EmailDTO(
                 customer.getEmail(),
-                "Registration Email",
+                title,
                 content
         );
         String requestBody;

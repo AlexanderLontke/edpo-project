@@ -8,9 +8,9 @@ camunda.bpm.admin-user:
   password: demo
 
 services:
-  paymentGateway:
-    uri: http://localhost:8085
   customerPersistence:
     uri: http://localhost:8082
   email:
+    uri: http://localhost:8083
+  paymentGateway:
     uri: http://localhost:8085

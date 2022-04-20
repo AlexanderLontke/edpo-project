@@ -1,5 +1,16 @@
+server:
+  port: 8084
+
 spring.datasource.url: jdbc:h2:file:./camunda-h2-database
 
 camunda.bpm.admin-user:
   id: demo
   password: demo
+
+services:
+  paymentGateway:
+    uri: http://payment-gateway:8083
+  customerPersistence:
+    uri: http://customer-persistence:9000
+  email:
+    uri: http://email:8085

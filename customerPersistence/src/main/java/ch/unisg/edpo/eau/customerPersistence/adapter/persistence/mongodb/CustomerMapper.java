@@ -7,11 +7,16 @@ import org.springframework.stereotype.Component;
 public class CustomerMapper {
     public Customer toEntity(MongoCustomerDocument mongoCustomerDocument) {
         return new Customer(
+                mongoCustomerDocument.getCustomerID(),
+                mongoCustomerDocument.getIBAN(),
+                mongoCustomerDocument.getBillingCycle(),
+                mongoCustomerDocument.getOutstandingAmount(),
                 mongoCustomerDocument.getName(),
                 mongoCustomerDocument.getStreet(),
                 mongoCustomerDocument.getHouseNumber(),
                 mongoCustomerDocument.getPostalCode(),
-                mongoCustomerDocument.isApproved()
+                mongoCustomerDocument.isApproved(),
+                mongoCustomerDocument.getEmail()
         );
     }
 
@@ -21,7 +26,12 @@ public class CustomerMapper {
                 customer.getStreet(),
                 customer.getHouseNumber(),
                 customer.getPostalCode(),
-                customer.isApproved()
+                customer.isApproved(),
+                customer.getCustomerID(),
+                customer.getIBAN(),
+                customer.getBillingCycle(),
+                customer.getOutstandingAmount(),
+                customer.getEmail()
         );
     }
 }

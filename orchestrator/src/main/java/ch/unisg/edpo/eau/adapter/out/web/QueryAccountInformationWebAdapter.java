@@ -1,6 +1,8 @@
 package ch.unisg.edpo.eau.adapter.out.web;
 
 import ch.unisg.edpo.eau.application.port.out.QueryAccountInformationPort;
+import ch.unisg.edpo.eau.common.ConfigProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +16,14 @@ import java.util.Optional;
 @Component
 @Primary
 public class QueryAccountInformationWebAdapter implements QueryAccountInformationPort {
+    @Autowired
+    ConfigProperties configProperties;
+
     @Override
     public Optional<String> retrieveAccountInformation(String accountId) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8084/Account/" + accountId))
+                .uri(URI.create(configProperties.getCustomerPersistenceURL() + "/Customer/" + accountId))
                 .headers("Content-Type", "application/json")
                 .GET().build();
         try {

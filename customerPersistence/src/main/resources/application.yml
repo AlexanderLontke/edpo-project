@@ -1,3 +1,6 @@
+server:
+  port: 9000
+
 spring:
   cloud:
     function:
@@ -11,7 +14,7 @@ spring:
         persistCustomer-in-0:
           destination: new-processed-customer
         persistCustomer-out-0:
-          destination: finished-processing-customer
+          destination: persisted-customer
   data:
     mongodb:
       uri: mongodb://root:8nP7s0a@localhost:27017/

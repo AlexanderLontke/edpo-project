@@ -1,8 +1,10 @@
 package ch.unisg.edpo.eau.adapter.out.web;
 
 import ch.unisg.edpo.eau.application.port.out.AccountChargePort;
-import ch.unisg.edpo.eau.domain.BookingTransaction;
+import ch.unisg.edpo.eau.common.ConfigProperties;
+import ch.unisg.edpo.eau.adapter.out.web.dto.BookingTransactionDTO;
 import org.camunda.bpm.engine.delegate.BpmnError;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -16,18 +18,22 @@ import java.net.http.HttpResponse;
 @Component
 @Primary
 public class AccountChargeWebAdapter implements AccountChargePort {
+    @Autowired
+    ConfigProperties configProperties;
+
     @Override
-    public void processTransaction(BookingTransaction bookingTransaction) {
+    public void processTransaction(BookingTransactionDTO bookingTransaction) {
         HttpClient client = HttpClient.newHttpClient();
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8083/paymentTransaction/"))
-                    .POST(HttpRequest.BodyPublishers.ofString(BookingTransaction.serialize(bookingTransaction)))
-                    .header(HttpHeaders.CONTENT_TYPE, BookingTransaction.MEDIA_TYPE)
+                    .uri(URI.create(configProperties.getPaymentGatewayURL() + "/paymentTransaction/"))
+                    .POST(HttpRequest.BodyPublishers.ofString(BookingTransactionDTO.serialize(bookingTransaction)))
+                    .header(HttpHeaders.CONTENT_TYPE, BookingTransactionDTO.MEDIA_TYPE)
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 201) {
-                System.out.println(response.body());
+                BookingTransactionDTO bookingTransactionDTO = BookingTransactionDTO.deserialize(response.body());
+                System.out.println("The booking status is: " + bookingTransactionDTO.getStatus());
             } else if (response.statusCode() == 400) {
                 throw new BpmnError("TransactionError", "The Transaction could not be processed.");
             } else {

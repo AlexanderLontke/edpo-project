@@ -90,13 +90,14 @@ services:
     depends_on:
       - kafka
     ports:
-      - "9000:9000"
+      - "8082:8082"
     environment:
+      - SERVER_PORT=8082
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES=kafka:2181
       - SPRING_DATA_MONGODB_URI=mongodb://root:8nP7s0a@mongodb:27017/
       - SPRING_DATA_MONGODB_DATABASE=edpo
-      - SERVICES_EMAIL_URI=http://email:8085
+      - SERVICES_EMAIL_URI=http://email:8083
 
 
   email:
@@ -106,21 +107,11 @@ services:
       context: ./email
       dockerfile: Dockerfile
     ports:
-      - "8085:8085"
-    networks:
-      - energyandutilities
-
-  payment-gateway:
-    container_name: payment-gateway
-    image: payment-gateway
-    build:
-      context: ./payment-gateway
-      dockerfile: Dockerfile
-    ports:
       - "8083:8083"
+    environment:
+      - SERVER_PORT=8083
     networks:
       - energyandutilities
-
 
   orchestrator:
     container_name: orchestrator
@@ -133,9 +124,25 @@ services:
     networks:
       - energyandutilities
     environment:
+      - SERVER_PORT=8084
       - CAMUNDA_BPM_ADMIN-USER_ID=demo
       - CAMUNDA_BPM_ADMIN-USER_PASSWORD=demo
-      - SERVICES_PAYMENTGATEWAY_URI=http://payment-gateway:8083
+      - SERVICES_CUSTOMERPERSISTENCE_URI=http://customer-persistence:8082
+      - SERVICES_EMAIL_URI=http://email:8083
+      - SERVICES_PAYMENTGATEWAY_URI=http://payment-gateway:8085
+
+  payment-gateway:
+    container_name: payment-gateway
+    image: payment-gateway
+    build:
+      context: ./payment-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    environment:
+      - SERVER_PORT=8085
+    networks:
+      - energyandutilities
 
 volumes:
   database:

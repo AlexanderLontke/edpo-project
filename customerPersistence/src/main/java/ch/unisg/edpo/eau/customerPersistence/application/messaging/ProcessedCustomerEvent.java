@@ -4,7 +4,7 @@ import ch.unisg.edpo.eau.customerPersistence.application.messaging.dto.CustomerD
 import ch.unisg.edpo.eau.customerPersistence.application.messaging.dto.Message;
 import ch.unisg.edpo.eau.customerPersistence.application.port.LoadCustomerListPort;
 import ch.unisg.edpo.eau.customerPersistence.application.port.SaveCustomerListPort;
-import ch.unisg.edpo.eau.customerPersistence.application.port.SendEmailCommandPort;
+import ch.unisg.edpo.eau.customerPersistence.application.port.SendEmailEventPort;
 import ch.unisg.edpo.eau.customerPersistence.domain.Customer;
 import ch.unisg.edpo.eau.customerPersistence.domain.CustomerList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.function.Function;
 @Component
 public class ProcessedCustomerEvent {
     @Autowired
-    private SendEmailCommandPort sendEmailPort;
+    private SendEmailEventPort sendEmailPort;
 
     @Autowired
     private LoadCustomerListPort loadCustomerListPort;

@@ -20,7 +20,7 @@ public class ReceiveNewCustomerAdapter {
     public ResponseEntity<String> receiveNewCustomerEvent(@RequestBody CustomerDTO customer){
         System.out.println("Customer received");
         messageSender.send(
-                "new-customer-event", new Message<>("ReceiveNewCustomerEvent", customer.toEntity())
+                "new-customer-command", new Message<>("ReceiveNewCustomerCommand", customer.toEntity())
         );
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

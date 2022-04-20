@@ -1,7 +1,7 @@
 package ch.unisg.edpo.eau.customerPersistence.adapter.web.http.out;
 
 import ch.unisg.edpo.eau.customerPersistence.adapter.web.http.dto.EmailDTO;
-import ch.unisg.edpo.eau.customerPersistence.application.port.SendEmailCommandPort;
+import ch.unisg.edpo.eau.customerPersistence.application.port.SendEmailEventPort;
 import ch.unisg.edpo.eau.customerPersistence.common.ConfigProperties;
 import ch.unisg.edpo.eau.customerPersistence.domain.Customer;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,7 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SendEmailCommandAdapter implements SendEmailCommandPort {
+public class SendEmailEventAdapter implements SendEmailEventPort {
     @Autowired
     ConfigProperties configProperties;
 

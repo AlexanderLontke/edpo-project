@@ -9,6 +9,6 @@ spring:
 
       bindings:
         approveCustomer-in-0:
-          destination : new-customer-event
+          destination : new-customer-command
         approveCustomer-out-0:
           destination: new-processed-customer

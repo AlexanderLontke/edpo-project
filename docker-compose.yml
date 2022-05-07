@@ -46,6 +46,9 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
+    working_dir: /data
+    volumes:
+      - ./data:/data
 
   onboardingGateway:
     container_name: onboarding-gateway
@@ -141,6 +144,15 @@ services:
       - "8085:8085"
     environment:
       - SERVER_PORT=8085
+    networks:
+      - energyandutilities
+
+  eventstrom:
+    container_name: eventstrom
+    image: eventstrom
+    build:
+      context: ./eventstrom
+      dockerfile: Dockerfile
     networks:
       - energyandutilities
 

@@ -1,0 +1,44 @@
+{
+    "message_id": "veryniceMessageId1",
+    "message_type": "ED",
+    "time_start": 12345,
+    "time_end": 12360,
+    "E_i_minus_one": 420,
+    "E_i": 489,
+    "deltaE": 69,
+    "deviceId": "veryNiceDevice4711",
+    "customer_id": "08150815"
+}
+{
+    "message_id": "veryniceMessageId2",
+    "message_type": "ED",
+    "time_start": 12363,
+    "time_end": 12369,
+    "E_i_minus_one": 489,
+    "E_i": 495,
+    "deltaE": 6,
+    "deviceId": "veryNiceDevice4711",
+    "customer_id": "08150815"
+}
+{
+    "message_id": "veryniceMessageId3",
+    "message_type": "ED",
+    "time_start": 12345,
+    "time_end": 12360,
+    "E_i_minus_one": 23,
+    "E_i": 45,
+    "deltaE": 22,
+    "deviceId": "veryNiceDevice0815",
+    "customer_id": "13370815"
+}
+{
+    "message_id": "veryniceMessageId4",
+    "message_type": "ED",
+    "time_start": 12363,
+    "time_end": 12369,
+    "E_i_minus_one": 45,
+    "E_i": 69,
+    "deltaE": 24,
+    "deviceId": "veryNiceDevice0815",
+    "customer_id": "13370815"
+}

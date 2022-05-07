@@ -3,7 +3,7 @@ package ch.unisg.edpo.eau.eventstrom;
 
 import ch.unisg.edpo.eau.eventstrom.model.Customer;
 import ch.unisg.edpo.eau.eventstrom.model.EnergyMeter;
-import ch.unisg.edpo.eau.eventstrom.model.join.CustomerAndEnergy;
+import ch.unisg.edpo.eau.eventstrom.model.CustomerAndEnergy;
 import com.mitchseymour.kafka.serialization.avro.AvroSerdes;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -21,9 +21,9 @@ class EventstromTopology {
         Serde<Customer> customerSerde = AvroSerdes.get(Customer.class);
 
         KStream<byte[], EnergyMeter> consumerStream =
-                builder.stream("energyconsumer", Consumed.with(Serdes.ByteArray(), energyMeterSerde));
+                builder.stream("energy-consumer", Consumed.with(Serdes.ByteArray(), energyMeterSerde));
         KStream<byte[], EnergyMeter> producerStream =
-                builder.stream("energyproducer", Consumed.with(Serdes.ByteArray(), energyMeterSerde));
+                builder.stream("energy-producer", Consumed.with(Serdes.ByteArray(), energyMeterSerde));
 
         // Merge producer and consumer reading streams
         KStream<byte[], EnergyMeter> energyStream = consumerStream.merge(producerStream);
@@ -38,14 +38,28 @@ class EventstromTopology {
 
         // join energy events -> customers
         ValueJoiner<EnergyMeter, Customer, CustomerAndEnergy> energyCustomerJoiner =
-                CustomerAndEnergy::new;
+                (energyMeter, customer) -> CustomerAndEnergy.newBuilder()
+                        .setMessageId(energyMeter.getMessageId())
+                        .setMessageType(energyMeter.getMessageType())
+                        .setTimeStart(energyMeter.getTimeStart())
+                        .setTimeEnd(energyMeter.getTimeEnd())
+                        .setDeltaE(energyMeter.getDeltaE())
+                        .setDeviceId(energyMeter.getDeviceId())
+                        .setCustomerId(customer.getCustomerId())
+                        .setCustomerName(customer.getCustomerName())
+                        .setCustomerPostalCode(customer.getCustomerPostalCode())
+                        .build();
         KStream<byte[], CustomerAndEnergy> energyWithCustomers =
                 energyStream.join(customers, energyCustomerJoiner, energyJoinParams);
 
         KGroupedStream<String, CustomerAndEnergy> grouped = energyWithCustomers.groupBy(
-                (key, value) -> value.getCustomer_id().toString()
+                (key, customerAndEnergy) -> customerAndEnergy.getCustomerId().toString(),
+                Grouped.with(
+                        "grouped-customer-and-energy",
+                        Serdes.String(),
+                        AvroSerdes.get(CustomerAndEnergy.class)
+                )
         );
-
         return builder.build();
     }
 }

@@ -17,7 +17,7 @@
     },
     {
       "name": "time_end",
-      "type": "string"
+      "type": "long"
     },
     {
       "name": "E_i_minus_one",

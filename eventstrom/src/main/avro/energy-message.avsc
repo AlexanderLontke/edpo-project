@@ -34,6 +34,10 @@
     {
       "name": "deviceId",
       "type": "string"
+    },
+    {
+      "name": "customer_id",
+      "type": "string"
     }
   ]
 }

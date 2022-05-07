@@ -20,21 +20,30 @@ class EventstromTopology {
         Serde<EnergyMeter> energyMeterSerde = AvroSerdes.get(EnergyMeter.class);
         Serde<Customer> customerSerde = AvroSerdes.get(Customer.class);
 
-        KStream<byte[], EnergyMeter> consumerStream =
-                builder.stream("energy-consumer", Consumed.with(Serdes.ByteArray(), energyMeterSerde));
-        KStream<byte[], EnergyMeter> producerStream =
-                builder.stream("energy-producer", Consumed.with(Serdes.ByteArray(), energyMeterSerde));
+        KStream<String, EnergyMeter> consumerStream =
+                builder.stream("energy-consumer", Consumed.with(Serdes.String(), energyMeterSerde));
+        KStream<String, EnergyMeter> producerStream =
+                builder.stream("energy-producer", Consumed.with(Serdes.String(), energyMeterSerde))
+                        .mapValues((v) -> {
+                            // Invert energy coming from producers as it should be treated
+                            // as negative energy consumption
+                            v.setDeltaE(v.getDeltaE() * -1);
+                            return v;
+                        });
 
         // Merge producer and consumer reading streams
-        KStream<byte[], EnergyMeter> energyStream = consumerStream.merge(producerStream);
+        KStream<String, EnergyMeter> energyStream =
+                consumerStream
+                        .merge(producerStream)
+                        .selectKey((k,v) -> v.getCustomerId().toString());
 
         // Create shared customer table
-        KTable<byte[], Customer> customers =
-                builder.table("customers", Consumed.with(Serdes.ByteArray(), customerSerde));
+        KTable<String, Customer> customers =
+                builder.table("customers", Consumed.with(Serdes.String(), customerSerde));
 
         // Join params for energy events -> customers
-        Joined<byte[], EnergyMeter, Customer> energyJoinParams =
-                Joined.with(Serdes.ByteArray(), energyMeterSerde, customerSerde);
+        Joined<String, EnergyMeter, Customer> energyJoinParams =
+                Joined.with(Serdes.String(), energyMeterSerde, customerSerde);
 
         // join energy events -> customers
         ValueJoiner<EnergyMeter, Customer, CustomerAndEnergy> energyCustomerJoiner =
@@ -49,7 +58,7 @@ class EventstromTopology {
                         .setCustomerName(customer.getCustomerName())
                         .setCustomerPostalCode(customer.getCustomerPostalCode())
                         .build();
-        KStream<byte[], CustomerAndEnergy> energyWithCustomers =
+        KStream<String, CustomerAndEnergy> energyWithCustomers =
                 energyStream.join(customers, energyCustomerJoiner, energyJoinParams);
 
         KGroupedStream<String, CustomerAndEnergy> grouped = energyWithCustomers.groupBy(

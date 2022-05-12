@@ -1,6 +1,7 @@
 package ch.unisg.edpo.eau.eventstrom;
 
 
+import ch.unisg.edpo.eau.eventstrom.model.Billing;
 import ch.unisg.edpo.eau.eventstrom.model.Customer;
 import ch.unisg.edpo.eau.eventstrom.model.EnergyMeter;
 import ch.unisg.edpo.eau.eventstrom.model.CustomerAndEnergy;
@@ -10,6 +11,11 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.kstream.Suppressed.BufferConfig;
+import org.apache.kafka.streams.kstream.internals.KStreamWindowAggregate;
+
+import java.time.Duration;
+
 
 class EventstromTopology {
 
@@ -19,7 +25,7 @@ class EventstromTopology {
 
         Serde<EnergyMeter> energyMeterSerde = AvroSerdes.get(EnergyMeter.class);
         Serde<Customer> customerSerde = AvroSerdes.get(Customer.class);
-
+        // TODO ensure co-partitioning of un-keyed energy events
         KStream<String, EnergyMeter> consumerStream =
                 builder.stream("energy-consumer", Consumed.with(Serdes.String(), energyMeterSerde));
         KStream<String, EnergyMeter> producerStream =
@@ -61,14 +67,43 @@ class EventstromTopology {
         KStream<String, CustomerAndEnergy> energyWithCustomers =
                 energyStream.join(customers, energyCustomerJoiner, energyJoinParams);
 
-        KGroupedStream<String, CustomerAndEnergy> grouped = energyWithCustomers.groupBy(
+        KGroupedStream<String, CustomerAndEnergy> groupedEnergyByCustomer = energyWithCustomers.groupBy(
+                // TODO do we need to specify the key explicitly?
                 (key, customerAndEnergy) -> customerAndEnergy.getCustomerId().toString(),
                 Grouped.with(
-                        "grouped-customer-and-energy",
+                        "grouped-energy-by-customer",
                         Serdes.String(),
                         AvroSerdes.get(CustomerAndEnergy.class)
                 )
         );
+
+        // turn energy events into energy per month
+        TimeWindows tumblingWindow =
+                TimeWindows.of(Duration.ofDays(30)).grace(Duration.ofHours(1));
+
+        // TODO: Use custom aggregate function to aggregate energy consumed
+        // The initial value of our aggregation will be a new Billing instances
+        Initializer<Billing> billingInitializer = Billing::new;
+
+        // The logic for aggregating high scores is implemented in the HighScores.add method
+        Aggregator<String, CustomerAndEnergy, Billing> billingAggregator = new Aggregator<String, CustomerAndEnergy, Billing>() {
+            @Override
+            public Billing apply(String s, CustomerAndEnergy customerAndEnergy, Billing billing) {
+
+                return Billing.newBuilder()
+                        .setCustomerId(customerAndEnergy.getCustomerId())
+                        .setTotalEnergyAmount(billing.getTotalEnergyAmount() + customerAndEnergy.getDeltaE())
+                        .build();
+            }
+        };
+
+        // Create monthly billing events by windowing
+        // TODO: Agree on billing events avro schema with Erik
+        KTable<Windowed<String>, Billing> windowedCustomerEnergy =
+                groupedEnergyByCustomer
+                        .windowedBy(tumblingWindow)
+                        .aggregate(billingInitializer, billingAggregator)
+                        .suppress(Suppressed.untilWindowCloses(BufferConfig.unbounded().shutDownWhenFull()));
         return builder.build();
     }
 }

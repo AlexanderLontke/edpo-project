@@ -12,7 +12,6 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.kstream.Suppressed.BufferConfig;
-import org.apache.kafka.streams.kstream.internals.KStreamWindowAggregate;
 
 import java.time.Duration;
 
@@ -37,6 +36,7 @@ class EventstromTopology {
                             return v;
                         });
 
+        consumerStream.print(Printed.<String, EnergyMeter>toSysOut().withLabel("consumer"));
         // Merge producer and consumer reading streams
         KStream<String, EnergyMeter> energyStream =
                 consumerStream
@@ -79,7 +79,7 @@ class EventstromTopology {
 
         // turn energy events into energy per month
         TimeWindows tumblingWindow =
-                TimeWindows.of(Duration.ofDays(30)).grace(Duration.ofHours(1));
+                TimeWindows.of(Duration.ofDays(30));
 
         // TODO: Use custom aggregate function to aggregate energy consumed
         // The initial value of our aggregation will be a new Billing instances

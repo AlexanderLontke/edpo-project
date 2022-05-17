@@ -1,3 +1,3 @@
-"08154711"|{"customer_id": "08154711", "customerName": "Low Performing Jonas", "customerPostalCode": 9014}
-"08150815"|{"customer_id": "08150815","customerName": "Average Performing Erik", "customerPostalCode": 9008}
-"13370815"|{"customer_id": "13370815", "customerName": "High Performing Performing Alex", "customerPostalCode": 9008}
+08154711|{"customer_id": "08154711", "customer_name": "Low Performing Jonas", "customer_postal_code": 9014}
+08150815|{"customer_id": "08150815","customer_name": "Average Performing Erik", "customer_postal_code": 9008}
+13370815|{"customer_id": "13370815", "customer_name": "High Performing Performing Alex", "customer_postal_code": 9008}

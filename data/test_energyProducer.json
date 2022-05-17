@@ -1,2 +1,2 @@
-{ "message_id": "veryniceMessageId23", "message_type": "ED", "time_start": 12345, "time_end": 12360, "E_i_minus_one": 500, "E_i": 515, "deltaE": 15, "deviceId": "veryNiceDevice4711", "customer_id": "08150815"}
-{ "message_id": "veryniceMessageId24", "message_type": "ED", "time_start": 12363, "time_end": 12369, "E_i_minus_one": 23, "E_i": 31, "deltaE": 8, "deviceId": "veryNiceDevice0815", "customer_id": "13370815"}
+{ "message_id": "veryniceMessageId23", "message_type": "ED", "time_start": 12345, "time_end": 12360, "e_i_minus_one": 500, "e_i": 515, "delta_e": 15, "device_id": "veryNiceDevice4711", "customer_id": "08150815"}
+{ "message_id": "veryniceMessageId24", "message_type": "ED", "time_start": 12363, "time_end": 12369, "e_i_minus_one": 23, "e_i": 31, "delta_e": 8, "device_id": "veryNiceDevice0815", "customer_id": "13370815"}

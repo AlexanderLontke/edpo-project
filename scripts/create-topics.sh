@@ -21,11 +21,4 @@ kafka-topics \
   --replication-factor 1 \
   --partitions 1 \
   --create
-# create the high-scores topic
-kafka-topics \
-  --bootstrap-server kafka:9092 \
-  --topic high-scores \
-  --replication-factor 1 \
-  --partitions 1 \
-  --create
 sleep infinity

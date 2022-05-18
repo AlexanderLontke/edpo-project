@@ -1,5 +1,6 @@
 package ch.unisg.edpo.eau.eventstrom;
 
+import ch.unisg.edpo.eau.eventstrom.model.Billing;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -36,97 +37,52 @@ public class RestService {
         this.streams = streams;
     }
 
-    ReadOnlyWindowStore<String, Long> getBpmStore() {
+    ReadOnlyWindowStore<String, Billing> getBillingStore() {
         return streams.store(
-                StoreQueryParameters.fromNameAndType("pulse-counts", QueryableStoreTypes.windowStore()));
-    }
-
-    ReadOnlyKeyValueStore<Object, Object> getAlertsStore() {
-        return streams.store(
-                StoreQueryParameters.fromNameAndType("alerts", QueryableStoreTypes.keyValueStore())
-        );
+                StoreQueryParameters.fromNameAndType("windowed-billing", QueryableStoreTypes.windowStore()));
     }
 
     void start() {
         Javalin app = Javalin.create().start(hostInfo.port());
-
-        /** Local window store query: all entries */
-        app.get("/bpm/all", this::getAll);
-
-        app.get("/bpm/range/:from/:to", this::getAllInRange);
-
-        app.get("/bpm/range/:key/:from/:to", this::getRange);
+        app.get("/customerInvoices/", this::getAll);
+        app.get("/customerInvoices/:customerId", this::getBillingForCustomer);
     }
 
     void getAll(Context ctx) {
-        Map<String, Long> bpm = new HashMap<>();
+        List<String> billingList = new ArrayList<>();
 
-        KeyValueIterator<Windowed<String>, Long> range = getBpmStore().all();
+        KeyValueIterator<Windowed<String>, Billing> range = getBillingStore().all();
         while (range.hasNext()) {
-            KeyValue<Windowed<String>, Long> next = range.next();
-            Windowed<String> key = next.key;
-            Long value = next.value;
-            bpm.put(key.toString(), value);
+            KeyValue<Windowed<String>, Billing> next = range.next();
+            Billing value = next.value;
+            billingList.add(value.toString());
         }
+        System.out.println(billingList);
         // close the iterator to avoid memory leaks
         range.close();
         // return a JSON response
-        ctx.json(bpm);
+        ctx.result(billingList.toString());
     }
 
-    void getAllInRange(Context ctx) {
-        List<Map<String, Object>> bpms = new ArrayList<>();
+    void getBillingForCustomer(Context ctx) {
+        String billing ="";
 
-        String from = ctx.pathParam("from");
-        String to = ctx.pathParam("to");
+        Instant timeFrom = Instant.ofEpochMilli(0);
+        Instant timeTo = Instant.now();
 
-        Instant fromTime = Instant.ofEpochMilli(Long.valueOf(from));
-        Instant toTime = Instant.ofEpochMilli(Long.valueOf(to));
+        WindowStoreIterator<Billing> range = getBillingStore().fetch(ctx.pathParam("customerId"), timeFrom, timeTo);
 
-        KeyValueIterator<Windowed<String>, Long> range = getBpmStore().fetchAll(fromTime, toTime);
-        while (range.hasNext()) {
-            Map<String, Object> bpm = new HashMap<>();
-            KeyValue<Windowed<String>, Long> next = range.next();
-            String key = next.key.key();
-            Window window = next.key.window();
-            Long start = window.start();
-            Long end = window.end();
-            Long count = next.value;
-            bpm.put("key", key);
-            bpm.put("start", Instant.ofEpochMilli(start).toString());
-            bpm.put("end", Instant.ofEpochMilli(end).toString());
-            bpm.put("count", count);
-            bpms.add(bpm);
+        if (range.hasNext()) {
+            KeyValue<Long, Billing> next = range.next();
+            billing = next.value.toString();
+        } else {
+            ctx.status(404);
         }
+        System.out.println(billing);
         // close the iterator to avoid memory leaks
         range.close();
+
         // return a JSON response
-        ctx.json(bpms);
-    }
-
-    void getRange(Context ctx) {
-        List<Map<String, Object>> bpms = new ArrayList<>();
-
-        String key = ctx.pathParam("key");
-        String from = ctx.pathParam("from");
-        String to = ctx.pathParam("to");
-
-        Instant fromTime = Instant.ofEpochMilli(Long.valueOf(from));
-        Instant toTime = Instant.ofEpochMilli(Long.valueOf(to));
-
-        WindowStoreIterator<Long> range = getBpmStore().fetch(key, fromTime, toTime);
-        while (range.hasNext()) {
-            Map<String, Object> bpm = new HashMap<>();
-            KeyValue<Long, Long> next = range.next();
-            Long timestamp = next.key;
-            Long count = next.value;
-            bpm.put("timestamp", Instant.ofEpochMilli(timestamp).toString());
-            bpm.put("count", count);
-            bpms.add(bpm);
-        }
-        // close the iterator to avoid memory leaks
-        range.close();
-        // return a JSON response
-        ctx.json(bpms);
+        ctx.result(billing);
     }
 }

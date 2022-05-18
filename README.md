@@ -3,6 +3,8 @@
 
 
 ````bash
+docker exec -it kafka bash
+
 kafka-console-producer --bootstrap-server kafka:9092 --topic energy-consumer <  test_energyConsumer.json
 kafka-console-producer --bootstrap-server kafka:9092 --topic energy-producer <  test_energyProducer.json
 kafka-console-producer --bootstrap-server kafka:9092 --topic customers --property 'parse.key=true' --property 'key.separator=|' < test_customers.json

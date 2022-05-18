@@ -28,7 +28,7 @@ public class CustomerSerdes implements Serde<CustomerNoAvro> {
     public Deserializer<CustomerNoAvro> deserializer() {
         return new Deserializer<CustomerNoAvro>() {
             private final Gson gson =
-                    new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+                    new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
             @Override
             public CustomerNoAvro deserialize(String s, byte[] bytes) {

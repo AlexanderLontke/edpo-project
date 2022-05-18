@@ -11,9 +11,12 @@ import ch.unisg.edpo.eau.eventstrom.serdes.EnergyMeterSerdes;
 import com.mitchseymour.kafka.serialization.avro.AvroSerdes;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.processor.StateStore;
+import org.apache.kafka.streams.state.WindowStore;
 
 import java.time.Duration;
 
@@ -44,7 +47,7 @@ class EventstromTopology {
         KStream<String, EnergyMeterNoAvro> energyStream =
                 consumerStream
                         .merge(producerStream)
-                        .selectKey((k,v) -> v.getCustomer_id());
+                        .selectKey((k, v) -> v.getCustomer_id());
 
         energyStream.print(Printed.<String, EnergyMeterNoAvro>toSysOut().withLabel("merged-and-keyed"));
 
@@ -52,9 +55,7 @@ class EventstromTopology {
         KTable<String, CustomerNoAvro> customers =
                 builder.table("customers", Consumed.with(Serdes.String(), customerSerde));
 
-        customers.toStream().print(
-                Printed.<String, CustomerNoAvro>toSysOut().withLabel("customers")
-        );
+        customers.toStream().print(Printed.<String, CustomerNoAvro>toSysOut().withLabel("customers"));
 
         // Join params for energy events -> customers
         Joined<String, EnergyMeterNoAvro, CustomerNoAvro> energyJoinParams =
@@ -69,34 +70,21 @@ class EventstromTopology {
                     System.out.println(customer.toString());
 
                     return CustomerAndEnergy.newBuilder()
-                        .setMessageId(energyMeter.getMessage_id())
-                        .setMessageType(energyMeter.getMessage_type())
-                        .setTimeStart(energyMeter.getTime_start())
-                        .setTimeEnd(energyMeter.getTime_end())
-                        .setDeltaE(energyMeter.getDelta_e())
-                        .setDeviceId(energyMeter.getDevice_id())
-                        .setCustomerId(customer.getCustomer_id())
-                        .setCustomerName(customer.getCustomer_name())
-                        .setCustomerPostalCode(customer.getCustomer_postal_code())
-                        .build();
-        };
+                            .setMessageId(energyMeter.getMessage_id())
+                            .setMessageType(energyMeter.getMessage_type())
+                            .setTimeStart(energyMeter.getTime_start())
+                            .setTimeEnd(energyMeter.getTime_end())
+                            .setDeltaE(energyMeter.getDelta_e())
+                            .setDeviceId(energyMeter.getDevice_id())
+                            .setCustomerId(customer.getCustomer_id())
+                            .setCustomerName(customer.getCustomer_name())
+                            .setCustomerPostalCode(customer.getCustomer_postal_code())
+                            .build();
+                };
         KStream<String, CustomerAndEnergy> energyWithCustomers =
                 energyStream.join(customers, energyCustomerJoiner, energyJoinParams);
 
-
-        KGroupedStream<String, CustomerAndEnergy> groupedEnergyByCustomer = energyWithCustomers.groupBy(
-                // TODO do we need to specify the key explicitly?
-                (key, customerAndEnergy) -> customerAndEnergy.getCustomerId().toString(),
-                Grouped.with(
-                        "grouped-energy-by-customer",
-                        Serdes.String(),
-                        AvroSerdes.get(CustomerAndEnergy.class)
-                )
-        );
-
-        // turn energy events into energy per month
-        TimeWindows tumblingWindow =
-                TimeWindows.of(Duration.ofDays(30));
+        energyWithCustomers.print(Printed.<String, CustomerAndEnergy>toSysOut().withLabel("customer-and-energy"));
 
         // TODO: Use custom aggregate function to aggregate energy consumed
         // The initial value of our aggregation will be a new Billing instances
@@ -106,23 +94,40 @@ class EventstromTopology {
         Aggregator<String, CustomerAndEnergy, Billing> billingAggregator = new Aggregator<String, CustomerAndEnergy, Billing>() {
             @Override
             public Billing apply(String s, CustomerAndEnergy customerAndEnergy, Billing billing) {
-
-                return Billing.newBuilder()
-                        .setCustomerId(customerAndEnergy.getCustomerId())
-                        .setTotalEnergyAmount(billing.getTotalEnergyAmount() + customerAndEnergy.getDeltaE())
-                        .build();
+                System.out.println("Billing before:");
+                System.out.println(billing);
+                billing.setCustomerId(customerAndEnergy.getCustomerId());
+                billing.setTotalEnergyAmount(billing.getTotalEnergyAmount() + customerAndEnergy.getDeltaE());
+                System.out.println("Billing after:");
+                System.out.println(billing);
+                return billing;
             }
         };
 
+        // turn energy events into energy per month
+        TimeWindows tumblingWindow =
+                TimeWindows.of(Duration.ofDays(30));
 
         // Create monthly billing events by windowing
         // TODO: Agree on billing events avro schema with Erik
-        KTable<Windowed<String>, Billing> windowedCustomerEnergy =
-                groupedEnergyByCustomer
-                        .windowedBy(tumblingWindow)
-                        .aggregate(billingInitializer, billingAggregator);
-                        //.suppress(Suppressed.untilWindowCloses(BufferConfig.unbounded().shutDownWhenFull()));
-        windowedCustomerEnergy.toStream().print(Printed.<Windowed<String>, Billing>toSysOut().withLabel("billing"));
+        //KTable<Windowed<String>, Billing> windowedCustomerEnergy =
+        energyWithCustomers
+                .groupByKey(
+                        //(key, customerAndEnergy) -> customerAndEnergy.getCustomerId().toString(),
+                        Grouped.with(
+                                "grouped-energy-by-customer",
+                                Serdes.String(),
+                                AvroSerdes.get(CustomerAndEnergy.class)
+                        ))
+                .windowedBy(tumblingWindow)
+                .aggregate(billingInitializer, billingAggregator,
+                        Materialized.<String, Billing, WindowStore<Bytes,byte[]>>as("windowed-billing")
+                                .withKeySerde(Serdes.String())
+                                .withValueSerde(AvroSerdes.get(Billing.class))
+                )
+                .toStream().print(Printed.<Windowed<String>, Billing>toSysOut().withLabel("billing"));
+        //.suppress(Suppressed.untilWindowCloses(BufferConfig.unbounded().shutDownWhenFull()));
+        //windowedCustomerEnergy.toStream().print(Printed.<Windowed<String>, Billing>toSysOut().withLabel("billing"));
         return builder.build();
     }
 }

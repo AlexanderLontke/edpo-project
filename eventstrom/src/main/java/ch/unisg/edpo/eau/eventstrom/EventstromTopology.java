@@ -31,7 +31,7 @@ class EventstromTopology {
         // Serde<Customer> customerSerde = AvroSerdes.get(Customer.class);
         Serde<EnergyMeterNoAvro> energyMeterSerde = new EnergyMeterSerdes();
         Serde<CustomerNoAvro> customerSerde = new CustomerSerdes();
-        // TODO ensure co-partitioning of un-keyed energy events
+
         KStream<String, EnergyMeterNoAvro> consumerStream =
                 builder.stream("energy-consumer", Consumed.with(Serdes.String(), energyMeterSerde));
         KStream<String, EnergyMeterNoAvro> producerStream =
@@ -86,7 +86,6 @@ class EventstromTopology {
 
         energyWithCustomers.print(Printed.<String, CustomerAndEnergy>toSysOut().withLabel("customer-and-energy"));
 
-        // TODO: Use custom aggregate function to aggregate energy consumed
         // The initial value of our aggregation will be a new Billing instances
         Initializer<Billing> billingInitializer = Billing::new;
 
@@ -109,7 +108,6 @@ class EventstromTopology {
                 TimeWindows.of(Duration.ofDays(30));
 
         // Create monthly billing events by windowing
-        // TODO: Agree on billing events avro schema with Erik
         //KTable<Windowed<String>, Billing> windowedCustomerEnergy =
         energyWithCustomers
                 .groupByKey(

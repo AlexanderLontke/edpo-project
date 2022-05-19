@@ -5,20 +5,20 @@ kafka-topics \
   --bootstrap-server kafka:9092 \
   --topic energy-consumer \
   --replication-factor 1 \
-  --partitions 1 \
+  --partitions 3 \
   --create
 # create the players topic
 kafka-topics \
   --bootstrap-server kafka:9092 \
   --topic energy-producer \
   --replication-factor 1 \
-  --partitions 1 \
+  --partitions 3 \
   --create
 # create the products topic
 kafka-topics \
   --bootstrap-server kafka:9092 \
   --topic customers \
   --replication-factor 1 \
-  --partitions 1 \
+  --partitions 3 \
   --create
 sleep infinity

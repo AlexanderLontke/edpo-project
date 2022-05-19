@@ -3,6 +3,8 @@
 
 
 ````bash
+docker compose -f docker-compose-v2.yml
+
 docker exec -it kafka bash
 
 kafka-console-producer --bootstrap-server kafka:9092 --topic energy-consumer <  test_energyConsumer.json

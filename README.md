@@ -13,3 +13,4 @@ kafka-console-producer --bootstrap-server kafka:9092 --topic customers --propert
 ````
  
 Then you can start the eventstrom application [App.java](eventstrom/src/main/java/ch/unisg/edpo/eau/eventstrom/App.java).
+The topology should run through within ~1-2min.

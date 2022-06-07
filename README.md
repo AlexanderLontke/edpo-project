@@ -3,7 +3,7 @@
 In order to run our event processing topology you need to first start kafka and send some messages via kafka.
 
 ````bash
-docker compose -f docker-compose-v2.yml
+docker compose -f docker-compose-v2.yml up
 
 docker exec -it kafka bash
 

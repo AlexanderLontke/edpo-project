@@ -1,0 +1,43 @@
+{
+  "namespace": "ch.unisg.edpo.eau.eventstrom.model",
+  "name": "EnergyMeter",
+  "type": "record",
+  "fields": [
+    {
+      "name": "message_id",
+      "type": "string"
+    },
+    {
+      "name": "message_type",
+      "type": "string"
+    },
+    {
+      "name": "time_start",
+      "type": "long"
+    },
+    {
+      "name": "time_end",
+      "type": "long"
+    },
+    {
+      "name": "E_i_minus_one",
+      "type": "double"
+    },
+    {
+      "name": "E_i",
+      "type": "double"
+    },
+    {
+      "name": "deltaE",
+      "type": "double"
+    },
+    {
+      "name": "deviceId",
+      "type": "string"
+    },
+    {
+      "name": "customer_id",
+      "type": "string"
+    }
+  ]
+}

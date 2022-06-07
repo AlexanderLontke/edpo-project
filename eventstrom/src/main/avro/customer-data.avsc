@@ -1,0 +1,18 @@
+{
+  "namespace": "ch.unisg.edpo.eau.eventstrom.model",
+  "name": "Customer",
+  "type": "record",
+  "fields": [
+    {
+      "name": "customer_id",
+      "type": "string"
+    },{
+      "name": "customerName",
+      "type": "string"
+    },
+    {
+      "name": "customerPostalCode",
+      "type": "int"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "namespace": "ch.unisg.edpo.eau.eventstrom.model",
+  "name": "Billing",
+  "type": "record",
+  "fields": [
+    {
+      "name": "customer_id",
+      "type": "string"
+    },{
+      "name": "totalEnergyAmount",
+      "type": "double"
+    }
+  ]
+}
